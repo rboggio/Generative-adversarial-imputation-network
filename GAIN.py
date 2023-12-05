@@ -68,6 +68,29 @@ class Generator(nn.Module):
 
 def gain(data_x: np.array, data_test: np.array, hint_rate: float, batch_size: int, alpha: int, epochs:int):
 
+    """
+    Implements the Generative Adversarial Imputation Network (GAIN) for imputing missing values in datasets.
+
+    Parameters:
+    data_x (np.array): The input data with missing values for training the GAIN model.
+    data_test (np.array): The test dataset for evaluating the performance of the trained model.
+    hint_rate (float): The probability of observing the missingness of data (used in the hint mechanism).
+    batch_size (int): The size of batches used in training.
+    alpha (int): The hyperparameter for balancing the generator's loss components.
+    epochs (int): The number of epochs for training the model.
+
+    The function processes the input data by first normalizing it and handling missing values. 
+    It then sets up the GAIN architecture, which consists of a generator and discriminator, 
+    and trains the model for the specified number of epochs. 
+    During training, it handles the sampling of random vectors and hint vectors, 
+    and updates the generator and discriminator using back-propagation.
+
+    The function also evaluates the model on the provided test dataset, calculates the mean squared error loss, 
+    and performs imputation.
+
+    Returns:
+    A tuple containing the mean squared error loss on the test dataset and the imputed data.
+    """
     
     # Parameters
     batch_size = batch_size
@@ -81,7 +104,6 @@ def gain(data_x: np.array, data_test: np.array, hint_rate: float, batch_size: in
 
     # Normalization
     norm_data = MinMaxScaler().fit_transform(data_x)
-    #norm_data, norm_parameters = normalization(data_x)
     norm_data_x = np.nan_to_num(norm_data, 0)
 
 
